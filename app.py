@@ -15,7 +15,7 @@ if uploaded_file is not None:
     st.image(image, caption='Uploaded Image.', use_column_width=True)
     st.write("Classifying...")
     
-    st.write("")
+    st.write("Guess")
     label = teachable_machine_classification(image, 'model.h5')
     if label == 0:
        st.write("It predicted Anaconda")
