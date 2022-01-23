@@ -20,7 +20,7 @@ if uploaded_file is not None:
     if label == 0:
        st.write("It predicted Anaconda")
     else:
-       st.write("It predicted Python)
+       st.write("It predicted Python")
    
         
         
