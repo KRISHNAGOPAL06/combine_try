@@ -5,9 +5,9 @@ from tensorflow.keras.preprocessing.image import load_img,img_to_array
 from tensorflow.keras.models import load_model
 import numpy as np
 import keras
-st.title("Brain Tumor or Healthy Brain")
-st.header("Brain Tumor MRI Classifier")
-st.text("Upload a brain MRI Image for image classification as tumor or Healthy Brain")
+st.title("Python or Anaconda Preditor")
+st.header("Large Serpent Classifier")
+st.text("Upload an Image for of either serpent for  image classification as anaconda or python")
      
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg","png","jpeg"])
 if uploaded_file is not None:
@@ -18,9 +18,9 @@ if uploaded_file is not None:
     st.write("")
     label = teachable_machine_classification(image, 'model.h5')
     if label == 0:
-       st.write("The MRI scan detects a brain tumor")
+       st.write("It predicted Anaconda")
     else:
-       st.write("The MRI scan shows an healthy brain")
+       st.write("It predicted Python)
    
         
         
