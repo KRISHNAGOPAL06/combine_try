@@ -5,7 +5,7 @@ from tensorflow.keras.preprocessing.image import load_img,img_to_array
 from tensorflow.keras.models import load_model
 import numpy as np
 import keras
-st.title("Python or Anaconda Preditor")
+st.title("Python or Anaconda Predictor")
 st.header("Large Serpent Classifier")
 st.text("Upload an Image for of either serpent for  image classification as anaconda or python")
      
