@@ -1,38 +1,32 @@
-import streamlit as st
+from flask import Flask, request, jsonify
 from img_classification import teachable_machine_classification
 from PIL import Image
 import numpy as np
 import io
-from flask import Flask
-from flask_cors import CORS
 
-# Create a Flask app
 app = Flask(__name__)
 
-# Allow requests from all origins
-CORS(app)
-
-st.title("Python or Anaconda Predictor")
-st.header("Large Serpent Classifier")
-st.text("Upload an Image for image classification as Anaconda or Python")
-
-@st.experimental_singleton
 def classify_image(image_data):
     image = Image.open(io.BytesIO(image_data))
-    return teachable_machine_classification(image, 'trained_model_accurate.h5')
+    label = teachable_machine_classification(image, 'trained_model_accurate.h5')
+    return label
 
-@st.experimental_singleton
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in {'jpg', 'jpeg', 'png'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'jpg', 'jpeg', 'png'}
 
 @app.route('/classify_image', methods=['POST'])
 def upload_file():
-    uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
-    if uploaded_file is not None:
-        image_data = uploaded_file.read()
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image uploaded'})
+    file = request.files['image']
+    if file.filename == '':
+        return jsonify({'error': 'No selected image'})
+    if file and allowed_file(file.filename):
+        image_data = file.read()
         label = classify_image(image_data)
-        return {"label": label}
+        return jsonify({'label': label})
+    else:
+        return jsonify({'error': 'Invalid file type'})
 
 if __name__ == '__main__':
-    app.run(debug=True)  # Run the Flask app
+    app.run(debug=True)
