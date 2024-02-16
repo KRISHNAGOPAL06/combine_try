@@ -1,24 +1,23 @@
-import streamlit as st
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from img_classification import teachable_machine_classification
-from PIL import Image, ImageOps
-from tensorflow.keras.preprocessing.image import load_img,img_to_array
-from tensorflow.keras.models import load_model
-import numpy as np
-import keras
-st.title("Python or Anaconda Predictor")
-st.header("Large Serpent Classifier")
-st.text("Upload an Image for of either serpent for  image classification as anaconda or python")
-     
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg","png","jpeg"])
-if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    st.image(image, caption='Uploaded Image.', use_column_width=True)
-    st.write("Classifying...")
-    
-    st.write("Guess")
+from PIL import Image
+
+app = Flask(__name__)
+CORS(app)
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file part'}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No selected file'}), 400
+
+    image = Image.open(file)
     label = teachable_machine_classification(image, 'trained_model_accurate.h5')
-    st.write(label)
-    
-   
-        
-        
+    return jsonify({'label': label})
+
+if __name__ == '__main__':
+    app.run(debug=True)
