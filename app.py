@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from img_classification import teachable_machine_classification
 from PIL import Image
@@ -8,16 +8,19 @@ CORS(app)
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
+    try:
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file part'}), 400
 
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify({'error': 'No selected file'}), 400
 
-    image = Image.open(file)
-    label = teachable_machine_classification(image, 'trained_model_accurate.h5')
-    return jsonify({'label': label})
+        image = Image.open(file)
+        label = teachable_machine_classification(image, 'trained_model_accurate.h5')
+        return jsonify({'label': label}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
