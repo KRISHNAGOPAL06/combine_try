@@ -4,3 +4,4 @@ keras
 tensorflow
 numpy
 Flask-CORS
+gunicorn
