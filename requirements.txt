@@ -1,5 +1,5 @@
 opencv-python-headless
-streamlit
+flask
 keras
 tensorflow
 numpy
