@@ -4,26 +4,34 @@ import numpy as np
 import keras
 from keras.models import load_model
 from PIL import Image, ImageOps
+
+classes = ['Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy',
+           'Blueberry___healthy', 'Cherry_(including_sour)___Powdery_mildew', 'Cherry_(including_sour)___healthy',
+           'Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot', 'Corn_(maize)___Common_rust_',
+           'Corn_(maize)___Northern_Leaf_Blight', 'Corn_(maize)___healthy', 'Grape___Black_rot',
+           'Grape___Esca_(Black_Measles)', 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)', 'Grape___healthy',
+           'Orange___Haunglongbing_(Citrus_greening)', 'Peach___Bacterial_spot', 'Peach___healthy',
+           'Pepper,_bell___Bacterial_spot', 'Pepper,_bell___healthy', 'Potato___Early_blight',
+           'Potato___Late_blight', 'Potato___healthy', 'Raspberry___healthy', 'Soybean___healthy',
+           'Squash___Powdery_mildew', 'Strawberry___Leaf_scorch', 'Strawberry___healthy',
+           'Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight', 'Tomato___Leaf_Mold',
+           'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites Two-spotted_spider_mite', 'Tomato___Target_Spot',
+           'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 'Tomato___healthy']
 def teachable_machine_classification(img, weights_file):
     
     model = keras.models.load_model(weights_file)
 
-    size = (224, 224)  # New size
-    
-    # Resize the image
-    image = img.resize(size)
-  
-    # Convert image to array
-    image_array = img_to_array(image)
-  
-    # Normalize the image
-    normalized_image_array = (image_array.astype(np.float32) / 127.0) - 1
-  
-    # Expand dimensions to match the model input shape
-    data = np.expand_dims(normalized_image_array, axis=0)
-
+    # Load the image
+    image = tf.keras.preprocessing.image.load_img(img, target_size=(224, 224))
+    # Convert image to numpy array
+    img_array = tf.keras.preprocessing.image.img_to_array(image)
+    # Expand dimensions to match model input shape
+    img_array = np.expand_dims(img_array, axis=0)
     # Make prediction
-    prediction = model.predict(data)
-    
-    return np.argmax(prediction)
+    prediction = model.predict(img_array)
+    # Get predicted class index
+    predicted_class_index = np.argmax(prediction)
+    # Get class label corresponding to the predicted index
+    predicted_class_label = classes[predicted_class_index]
+    return predicted_class_label
 
