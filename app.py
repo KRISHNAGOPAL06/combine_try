@@ -1,24 +1,34 @@
-import streamlit as st
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from img_classification import teachable_machine_classification
-from PIL import Image, ImageOps
-from tensorflow.keras.preprocessing.image import load_img,img_to_array
-from tensorflow.keras.models import load_model
+from PIL import Image
 import numpy as np
-import keras
-st.title("Python or Anaconda Predictor")
-st.header("Large Serpent Classifier")
-st.text("Upload an Image for of either serpent for  image classification as anaconda or python")
-     
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg","png","jpeg"])
-if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    st.image(image, caption='Uploaded Image.', use_column_width=True)
-    st.write("Classifying...")
-    
-    st.write("Guess")
+import io
+
+app = Flask(__name__)
+CORS(app, origins='http://localhost:3000')
+
+def classify_image(image_data):
+    image = Image.open(io.BytesIO(image_data))
     label = teachable_machine_classification(image, 'trained_model_accurate.h5')
-    st.write(label)
-    
-   
-        
-        
+    return label
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'jpg', 'jpeg', 'png'}
+
+@app.route('/classify_image', methods=['POST'])
+def upload_file():
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image uploaded'})
+    file = request.files['image']
+    if file.filename == '':
+        return jsonify({'error': 'No selected image'})
+    if file and allowed_file(file.filename):
+        image_data = file.read()
+        label = classify_image(image_data)
+        return jsonify({'label': label})
+    else:
+        return jsonify({'error': 'Invalid file type'})
+
+if __name__ == '__main__':
+    app.run(debug=True)
