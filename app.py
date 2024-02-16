@@ -6,7 +6,7 @@ import numpy as np
 import io
 
 app = Flask(__name__)
-CORS(app, origins='http://localhost:3000/culti_doctor')
+CORS(app, origins="*")
 
 def classify_image(image_data):
     image = Image.open(io.BytesIO(image_data))
