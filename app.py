@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from img_classification import teachable_machine_classification
 from PIL import Image
 import numpy as np
 import io
 
 app = Flask(__name__)
+CORS(app)
 
 def classify_image(image_data):
     image = Image.open(io.BytesIO(image_data))
