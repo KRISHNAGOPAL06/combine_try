@@ -16,7 +16,7 @@ if uploaded_file is not None:
     st.write("Classifying...")
     
     st.write("Guess")
-    label = teachable_machine_classification(image, 'snake_pred1.h5')
+    label = teachable_machine_classification(image, 'trained_model_accurate.h5')
     if label == 0:
        st.write("It predicted Anaconda")
     else:
