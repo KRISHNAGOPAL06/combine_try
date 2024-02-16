@@ -2,7 +2,7 @@ mkdir -p ~/.streamlit/
 echo "\
 [server]\n\
 port = $PORT\n\
-enableCORS = true\n\
+enableCORS = false\n\
 headless = true\n\
 allowAllOrigins = true\n\
 " > ~/.streamlit/config.toml
