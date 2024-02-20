@@ -16,6 +16,7 @@ crop_models = {
     # Add more crops and their corresponding model names and classes lists here
 }
 
+
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
@@ -23,23 +24,13 @@ def predict():
             return jsonify({'error': 'No file part'}), 400
 
         file = request.files['file']
-        crop_name = request.form.get('crop_name')  # Get crop name from form data
-        
-        if crop_name not in crop_models:
-            return jsonify({'error': 'Invalid crop name'}), 400
+        crop_name = request.form.get('crop_name')  
 
-        model_info = crop_models[crop_name]
-        classes_list = model_info['classes_list']
-        model_name = model_info['model_name']
+        print('Received image:', file)
+        print('Crop name:', crop_name)
 
-        if file.filename == '':
-            return jsonify({'error': 'No selected file'}), 400
-        
-        image = Image.open(file)
-        label = apple_classification(image, model_name, classes_list, crop_name)
-        return jsonify({'label': label}), 200
+        return jsonify({'message': 'Image and Crop Name received successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 if __name__ == '__main__':
     app.run(debug=True)
