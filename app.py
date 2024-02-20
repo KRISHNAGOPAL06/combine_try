@@ -25,16 +25,15 @@ def predict():
 
         file = request.files['file']
         crop_name = request.form.get('crop_name')  
-        if crop_name not in crop_models:
-            return jsonify({'error': 'Invalid crop name'}), 400
-
+        print('Received image:', file)
+        print('Crop name:', crop_name)
         model_info = crop_models[crop_name]
         classes_list = model_info['classes_list']
         model_name = model_info['model_name']
         image = Image.open(file)
-        label = apple_classification(image, model_name, classes_list, crop_name)
-        print('Received image:', file)
-        print('Crop name:', crop_name)
+        label = apple_classification(file, model_name, classes_list)
+        print(model_info)
+        
 
         return jsonify({'label': label}), 200
     except Exception as e:
