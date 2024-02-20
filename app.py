@@ -4,7 +4,7 @@ from img_classification import teachable_machine_classification
 from apple import apple_classification
 from PIL import Image
 
-app = Flask(_name_)
+app = Flask(__name__)
 CORS(app)
 
 # Define a dictionary to store model names and classes lists for different crops
@@ -50,5 +50,5 @@ def predict():
         return jsonify({'error': str(e)}), 500
 
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True)
