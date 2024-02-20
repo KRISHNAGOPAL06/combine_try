@@ -30,9 +30,11 @@ def predict():
         model_info = crop_models[crop_name]
         classes_list = model_info['classes_list']
         model_name = model_info['model_name']
+        print(model_name)
+        print(classes_list)
         image = Image.open(file)
-        label = apple_classification(file, model_name, classes_list)
-        print(model_info)
+        label = apple_classification(image, model_name, classes_list)
+        print(label)
         
 
         return jsonify({'label': label}), 200
