@@ -13,6 +13,14 @@ crop_models = {
         'classes_list': ['Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy', 'invalid'],
         'model_name': 'apple_last.h5'
     },
+    'potato': {
+        'classes_list': ['Potato___Early_blight','Potato___Late_blight','Potato___healthy','invalid'],
+        'model_name': 'potato_last.h5'
+    },
+    'corn': {
+        'classes_list': ['Corn___Cercospora_leaf_spot Gray_leaf_spot', 'Corn___Common_rust', 'Corn___Northern_Leaf_Blight', 'Corn___healthy', 'invalid'],
+        'model_name': 'corn_last.h5'
+    }
     # Add more crops and their corresponding model names and classes lists here
 }
 
