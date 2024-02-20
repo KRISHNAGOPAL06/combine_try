@@ -2,10 +2,26 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from PIL import Image
 import requests
-from io import BytesIO
+from io import BytesIO\
+from apple import apple_classification
 
 app = Flask(__name__)
 CORS(app)
+crop_models = {
+    'apple': {
+        'classes_list': ['Apple__Apple_scab', 'Apple_Black_rot', 'Apple_Cedar_apple_rust', 'Apple__healthy', 'invalid'],
+        'model_name': 'apple_last.h5'
+    },
+    'potato': {
+        'classes_list': ['Potato__Early_blight','Potato_Late_blight','Potato__healthy','invalid'],
+        'model_name': 'potato_last.h5'
+    },
+    'corn': {
+        'classes_list': ['Corn__Cercospora_leaf_spot Gray_leaf_spot', 'Corn_Common_rust', 'Corn_Northern_Leaf_Blight', 'Corn__healthy', 'invalid'],
+        'model_name': 'corn_last.h5'
+    }
+    # Add more crops and their corresponding model names and classes lists here
+}
 
 # Define your API key for the Remove.bg API
 REMOVE_BG_API_KEY = 'mh5QtvF6HrKsYaBFPDW6LDje'
@@ -58,10 +74,16 @@ def predict():
         processed_image = remove_background(image)
 
         if processed_image:
-            # Call the prediction model with the processed image
-            # Here, you should replace `model_prediction_function` with the appropriate function
-            # to predict the label using the processed image
-            label = model_prediction_function(processed_image)
+            crop_name = request.form.get('crop_name')  
+            print('Received image:', file)
+            print('Crop name:', crop_name)
+            model_info = crop_models[crop_name]
+            classes_list = model_info['classes_list']
+            model_name = model_info['model_name']
+            print(model_name)
+            print(classes_list)
+            label = apple_classification(processed_image, model_name, classes_list)
+            print(label)
             return jsonify({'label': label}), 200
         else:
             return jsonify({'error': 'Failed to process image'}), 500
