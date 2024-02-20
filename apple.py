@@ -1,16 +1,29 @@
-from PIL import Image
-from keras.preprocessing.image import load_img,img_to_array
-import tensorflow as tf
-import io
-
-import numpy as np
-import keras
-from keras.models import load_model
 from PIL import Image, ImageOps
+import numpy as np
+import io
+import tensorflow as tf
+import keras
 
-def apple_classification(img, weights_file,classes):
+def preprocess_image(img):
+    # Convert image to RGBA (if not already)
+    img = img.convert("RGBA")
     
+    # Create a white background image with the same size
+    new_img = Image.new("RGBA", img.size, "WHITE")
+    
+    # Composite the original image onto the white background
+    new_img.paste(img, (0, 0), img)
+    
+    # Convert RGBA to RGB
+    new_img = new_img.convert("RGB")
+    
+    return new_img
+
+def apple_classification(img, weights_file, classes):
     model = keras.models.load_model(weights_file)
+    
+    # Preprocess the image to make background white
+    img = preprocess_image(img)
 
     # Convert PIL image to bytes
     img_bytes = io.BytesIO()
