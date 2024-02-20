@@ -23,7 +23,7 @@ def predict():
             return jsonify({'error': 'No selected file'}), 400
 
         image = Image.open(file)
-        label = teachable_machine_classification(image, model_name,classes_list)
+        label = apple_classification(image, model_name,classes_list)
         return jsonify({'label': label}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
