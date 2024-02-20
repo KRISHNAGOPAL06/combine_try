@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from PIL import Image
 import requests
-from io import BytesIO\
+from io import BytesIO
 from apple import apple_classification
 
 app = Flask(__name__)
