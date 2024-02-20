@@ -9,7 +9,7 @@ from keras.models import load_model
 from PIL import Image, ImageOps
 
 classes = ['Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy','Invalid']
-def teachable_machine_classification(img, weights_file):
+def apple_classification(img, weights_file):
     
     model = keras.models.load_model(weights_file)
 
