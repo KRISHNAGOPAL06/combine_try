@@ -51,7 +51,7 @@ def remove_background(image):
             processed_image = Image.open(BytesIO(response.content))
 
             # Create a new image with the desired background color
-            background = Image.new('RGB', processed_image.size, (228, 225, 220))
+            background = Image.new('RGB', processed_image.size, (178, 161, 171))
 
             # Composite the processed image on top of the background
             processed_with_bg = Image.alpha_composite(background.convert('RGBA'), processed_image.convert('RGBA')).convert('RGB')
