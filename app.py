@@ -13,7 +13,7 @@ crop_models = {
         'model_name': 'apple_last.h5'
     },
     'potato': {
-        'classes_list': ['Potato__Early_blight','Potato_Late_blight','Potato__healthy','invalid'],
+        'classes_list': ['EarlyBlight', 'Healthy', 'LateBlight', 'invalid'],
         'model_name': 'potato_last.h5'
     },
     'corn': {
